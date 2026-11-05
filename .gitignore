@@ -1,0 +1,23 @@
+# Build directories
+build/
+cmake-build-*/
+
+# Compiled binaries and object files
+*.exe
+*.dll
+*.o
+*.obj
+*.a
+*.lib
+
+# IDE files
+.vscode/
+.idea/
+*.user
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
