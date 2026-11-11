@@ -55,6 +55,16 @@ public:
     int modifyOrder(int orderId, int64_t newPrice, int newQuantity);
 
     bool validate() const;
+
+    int peekNextOrderId() const {
+    return nextOrderId;
+}
+
+int previewModifyOrderId(
+    int orderId,
+    int64_t newPrice,
+    int newQuantity
+) const;
 };
 
 #endif

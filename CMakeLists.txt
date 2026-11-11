@@ -39,6 +39,7 @@ find_package(GTest CONFIG REQUIRED)
 
 add_executable(OrderBookTests
     tests/OrderBookTests.cpp
+    src/ReplayEngine.cpp
 )
 
 target_link_libraries(OrderBookTests PRIVATE
@@ -48,3 +49,40 @@ target_link_libraries(OrderBookTests PRIVATE
 
 include(GoogleTest)
 gtest_discover_tests(OrderBookTests)
+
+# Performance benchmarks (optional)
+option(BUILD_BENCHMARKS "Build Google Benchmark targets" OFF)
+
+if(BUILD_BENCHMARKS)
+    find_package(benchmark CONFIG REQUIRED)
+
+    add_executable(order_book_benchmarks
+        benchmarks/OrderBookBenchmarks.cpp
+    )
+
+    target_link_libraries(order_book_benchmarks PRIVATE
+        OrderBookCore
+        benchmark::benchmark_main
+    )
+
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(order_book_benchmarks PRIVATE
+            -Wall -Wextra -Wpedantic -Wshadow
+        )
+    endif()
+endif()
+
+# Individual operation latency measurements
+add_executable(order_book_latency
+    benchmarks/OrderBookLatency.cpp
+)
+
+target_link_libraries(order_book_latency PRIVATE
+    OrderBookCore
+)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(order_book_latency PRIVATE
+        -Wall -Wextra -Wpedantic -Wshadow
+    )
+endif()

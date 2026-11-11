@@ -17,10 +17,10 @@ int OrderBook::addOrder(OrderSide side, int64_t price, int quantity) {
     // Assign a unique ID to the incoming order.
     Order incomingOrder(nextOrderId++, side, price, quantity);
 
-    std::cout << "\nNew order received: ID=" << incomingOrder.orderId
-              << ", Side=" << (side == OrderSide::BUY ? "BUY" : "SELL")
-              << ", Price=" << price
-              << ", Quantity=" << quantity << '\n';
+    // std::cout << "\nNew order received: ID=" << incomingOrder.orderId
+    //           << ", Side=" << (side == OrderSide::BUY ? "BUY" : "SELL")
+    //           << ", Price=" << price
+    //           << ", Quantity=" << quantity << '\n';
 
     // Try to match it against the opposite side of the book.
     matchOrder(incomingOrder);
@@ -45,10 +45,10 @@ int OrderBook::addOrder(OrderSide side, int64_t price, int quantity) {
             }
         );
 
-        std::cout << "Remaining quantity " << incomingOrder.quantity
-                << " added to the order book.\n";
-    } else {
-        std::cout << "Order completely filled.\n";
+    //     std::cout << "Remaining quantity " << incomingOrder.quantity
+    //             << " added to the order book.\n";
+    // } else {
+    //     std::cout << "Order completely filled.\n";
     }
 
 
@@ -89,10 +89,10 @@ void OrderBook::matchOrder(Order& incomingOrder) {
                 tradedQuantity
             });
 
-            std::cout << "TRADE: Buy Order " << incomingOrder.orderId
-                      << " matched with Sell Order " << restingOrder.orderId
-                      << " at price " << restingOrder.price
-                      << ", Quantity=" << tradedQuantity << '\n';
+            // std::cout << "TRADE: Buy Order " << incomingOrder.orderId
+            //           << " matched with Sell Order " << restingOrder.orderId
+            //           << " at price " << restingOrder.price
+            //           << ", Quantity=" << tradedQuantity << '\n';
 
             // Update quantities.
             incomingOrder.quantity -= tradedQuantity;
@@ -140,10 +140,10 @@ void OrderBook::matchOrder(Order& incomingOrder) {
                 tradedQuantity
             });
 
-            std::cout << "TRADE: Sell Order " << incomingOrder.orderId
-                      << " matched with Buy Order " << restingOrder.orderId
-                      << " at price " << restingOrder.price
-                      << ", Quantity=" << tradedQuantity << '\n';
+            // std::cout << "TRADE: Sell Order " << incomingOrder.orderId
+            //           << " matched with Buy Order " << restingOrder.orderId
+            //           << " at price " << restingOrder.price
+            //           << ", Quantity=" << tradedQuantity << '\n';
 
             // Update quantities.
             incomingOrder.quantity -= tradedQuantity;
@@ -322,7 +322,7 @@ bool OrderBook::cancelOrder(int orderId) {
     // Remove the lookup entry after successful book removal.
     orderLookup.erase(lookupIt);
 
-    std::cout << "Order " << orderId << " cancelled successfully.\n";
+    // std::cout << "Order " << orderId << " cancelled successfully.\n";
 
     return true;
 }
@@ -363,8 +363,8 @@ int OrderBook::modifyOrder(
 
         existingOrder.quantity = newQuantity;
 
-        std::cout << "Order " << orderId
-                  << " quantity reduced to " << newQuantity << '\n';
+        // std::cout << "Order " << orderId
+        //           << " quantity reduced to " << newQuantity << '\n';
 
         return orderId;
     }
@@ -478,4 +478,34 @@ bool OrderBook::validate() const {
     }
 
     return true;
+}
+
+int OrderBook::previewModifyOrderId(
+    int orderId,
+    int64_t newPrice,
+    int newQuantity
+) const {
+
+    if (newPrice <= 0 || newQuantity <= 0) {
+        return -1;
+    }
+
+    auto lookup = orderLookup.find(orderId);
+
+    if (lookup == orderLookup.end()) {
+        return -1;
+    }
+
+    const Order& existingOrder = *lookup->second.iterator;
+
+    // Same price and quantity not increased:
+    // modification retains the original order ID.
+    if (newPrice == existingOrder.price &&
+        newQuantity <= existingOrder.quantity) {
+        return orderId;
+    }
+
+    // Price change or quantity increase:
+    // modification creates a replacement order.
+    return nextOrderId;
 }
