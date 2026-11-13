@@ -8,19 +8,19 @@
 
 ## 1. Test Environment
 
-| Component | Configuration |
-|---|---|
-| Laptop | Samsung 960QFG |
-| Processor | 13th Gen Intel Core i7-1360P |
-| Physical cores | 12 |
-| Logical processors | 16 |
-| Installed RAM | 15.57 GB |
-| Operating system | Windows 11 Home Single Language, 64-bit |
-| Compiler | GCC 16.2.0 (MSYS2 UCRT64) |
-| CMake | 4.4.4 |
-| Ninja | 1.13.2 |
-| C++ standard | C++17 |
-| Build configuration | Release |
+| Component           |                           Configuration |
+|---------------------|-----------------------------------------|
+| Laptop              |                          Samsung 960QFG |
+| Processor           |            13th Gen Intel Core i7-1360P |
+| Physical cores      |                                      12 |
+| Logical processors  |                                      16 |
+| Installed RAM       |                                15.57 GB |
+| Operating system    | Windows 11 Home Single Language, 64-bit |
+| Compiler            |               GCC 16.2.0 (MSYS2 UCRT64) |
+| CMake               |                                   4.4.4 |
+| Ninja               |                                  1.13.2 |
+| C++ standard        |                                   C++17 |
+| Build configuration |                                 Release |
 
 ## 2. Implementation Under Test
 
